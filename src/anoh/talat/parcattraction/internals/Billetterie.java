@@ -1,12 +1,12 @@
-package anoh.talat.parcattraction;
+package anoh.talat.parcattraction.internals;
 
-class Billeterie {
+public class Billetterie {
     private static final int STOCK_INIT = 20;
     private boolean idle;
 
     private int stockDisponible;
 
-    Billeterie() {
+    public Billetterie() {
         stockDisponible = STOCK_INIT;
         idle = true;
     }
@@ -16,26 +16,26 @@ class Billeterie {
             idle = false;
             notifyAll();
             try {
-                wait();
                 System.out.printf("Un client est en attente d'achat de %d billets%n", nbreBillet);
+                wait();
             } catch (InterruptedException ignored) {
             }
         }
         stockDisponible -= nbreBillet;
-        System.out.printf("La billeterie a vendu %d billets%n", nbreBillet);
+        System.out.printf("La billetterie a vendu %d billets%n", nbreBillet);
     }
 
     synchronized void ajouterTicket(int nbreTicket) {
         while (idle) {
             try {
+                System.out.println("Le responsable billetterie en attente");
                 wait();
-                System.out.println("Le responsable billeterie en attente");
             } catch (InterruptedException ignored) {
             }
         }
         idle = true;
         stockDisponible += nbreTicket;
-        System.out.println("Billeterie alimenter de " + nbreTicket + " billets");
+        System.out.println("Billetterie alimenter de " + nbreTicket + " billets");
         notifyAll();
     }
 }

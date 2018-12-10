@@ -1,47 +1,29 @@
 package anoh.talat.parcattraction;
 
-import static anoh.talat.parcattraction.utils.Utils.randomInt;
+import anoh.talat.parcattraction.application.ParcApplication;
+import anoh.talat.parcattraction.backend.Backend;
+import org.restlet.Application;
+import org.restlet.Component;
+import org.restlet.Context;
+import org.restlet.data.Protocol;
 
 public class ParcAttraction {
 
-    private static final int NBRE_CLIENTS = 20;
-    private static final int NBRE_ATTRACTIONS = 5;
-    private static final int NBRE_NAVETTES_PAR_ATTRACTION = 3;
-    private static final int NBRE_NAVETTES = NBRE_NAVETTES_PAR_ATTRACTION * NBRE_ATTRACTIONS;
-
-    private ParcAttraction() {
-        // Billeterie
-        Billeterie billeterie = new Billeterie();
-        ResponsableBilleterie responsableBilleterie = new ResponsableBilleterie(billeterie);
-
-        // instanciation des attractions
-        Attraction[] attractions = new Attraction[NBRE_ATTRACTIONS];
-        for (int i = 0; i < NBRE_ATTRACTIONS; ++i)
-            attractions[i] = new Attraction(i + 1);
-
-        // instanciation des clients
-        Client[] clients = new Client[NBRE_CLIENTS];
-        for (int i = 0; i < NBRE_CLIENTS; ++i)
-            clients[i] = new Client(billeterie, attractions[randomInt(0, 4)], attractions[randomInt(0, 4)]);
-
-        // instanciation des navettes
-        Navette[] navettes = new Navette[NBRE_NAVETTES];
-        int k = 0;
-        for (int j = 0; j < NBRE_ATTRACTIONS; j++)
-            for (int i = 0; i < NBRE_NAVETTES_PAR_ATTRACTION; ++i)
-                navettes[k] = new Navette(++k, attractions[j]);
-
-        // demarrage des processus
-        responsableBilleterie.start();
-
-        for (Client c : clients)
-            c.start();
-
-        for (Navette n : navettes)
-            n.start();
+    ParcAttraction() {
+        throw new UnsupportedOperationException();
     }
 
-    public static void main(String[] args) {
-        new ParcAttraction();
+    public static void main(String[] args) throws Exception {
+        Component component = new Component();
+        Context context = component.getContext().createChildContext();
+        component.getServers().add(Protocol.HTTP, 8000);
+
+        Application application = new ParcApplication(context);
+
+        Backend backend = new Backend();
+        context.getAttributes().put("backend", backend);
+        component.getDefaultHost().attach(application);
+
+        component.start();
     }
 }

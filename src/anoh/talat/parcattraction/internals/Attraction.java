@@ -1,32 +1,40 @@
-package anoh.talat.parcattraction;
+package anoh.talat.parcattraction.internals;
 
-class Attraction {
+public class Attraction {
 
-    private Navette navetteCourant = null;
-    private final int numero;
+    private Navette navetteCourant;
+    public final int numero;
     private final String tag;
 
-    Attraction(int numero) {
+    public Attraction(int numero) {
         this.numero = numero;
         tag = "Attraction " + numero;
     }
 
+    /**
+     * Entree au quai.
+     *
+     * @param navette La navette qui souhaite rentrer au quai
+     */
     synchronized void quai(Navette navette) {
         while (navetteCourant != null) {
             try {
-                System.out.printf("%s: La Navette %d attend pour rentrer au quai%n", tag, navette.numero);
+                System.out.printf("%s: La navette %d attend de rentrer au quai%n", tag, navette.numero);
                 wait();
             } catch (InterruptedException ignored) {
             }
         }
-        System.out.printf("%s: La Navette %d est au quai%n", tag, navette.numero);
+        System.out.printf("%s: La navette %d est au quai%n", tag, navette.numero);
         navetteCourant = navette;
     }
 
+    /**
+     * Montee d'un client dans la navette
+     */
     synchronized void monter() {
         while (navetteCourant == null || navetteCourant.placeDisponible == 0) {
             try {
-                System.out.printf("%s: Un client en attente de navette%n", tag);
+                System.out.println(tag + ": Un client en attente de navette");
                 wait();
             } catch (InterruptedException ignored) {
             }
@@ -35,10 +43,13 @@ class Attraction {
         navetteCourant.placeDisponible--;
     }
 
+    /**
+     * Depart d'une navette du quai
+     */
     synchronized void voyage() {
         System.out.printf(
-                "%s: La navette %d commence le voyage avec %d places de disponible%n",
-                tag, navetteCourant.numero, navetteCourant.placeDisponible
+                "%s: La navette %d commence le voyage avec %d client(s) abord%n",
+                tag, navetteCourant.numero, 20 - navetteCourant.placeDisponible
         );
         navetteCourant = null;
         notifyAll();
