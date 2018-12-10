@@ -21,6 +21,7 @@ class Attraction {
         }
         System.out.printf("%s: La Navette %d est au quai%n", tag, navette.numero);
         navetteCourant = navette;
+        notifyAll();
     }
 
     synchronized void monter() {
