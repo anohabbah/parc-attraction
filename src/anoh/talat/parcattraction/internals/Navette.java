@@ -14,17 +14,17 @@ public class Navette extends Thread {
 
     public Navette(int numero, Attraction attraction) {
         this.numero = numero;
-        setDaemon(true);
         placeDisponible = PLACE_INIT;
         this.attraction = attraction;
+        setDaemon(true);
     }
 
     @Override
     public void run() {
-       while (true) {
-           arrivee();
-           depart();
-       }
+        while (true) {
+            arrivee();
+            depart();
+        }
 
     }
 

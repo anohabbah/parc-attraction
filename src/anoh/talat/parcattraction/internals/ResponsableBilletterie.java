@@ -6,8 +6,8 @@ public class ResponsableBilletterie extends Thread {
     private Billetterie billetterie;
 
     public ResponsableBilletterie(Billetterie billetterie) {
-        setDaemon(true);
         this.billetterie = billetterie;
+        setDaemon(true);
     }
 
     @Override
