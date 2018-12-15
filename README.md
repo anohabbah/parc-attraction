@@ -1,3 +1,3 @@
 Binômes:
  - Abbah ANOH
- - Laeba Talat
+ - Laeba TALAT
