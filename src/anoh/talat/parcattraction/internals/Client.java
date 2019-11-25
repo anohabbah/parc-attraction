@@ -21,7 +21,7 @@ public class Client extends Thread {
         this.attraction2 = attraction2;
     }
 
-    private void achterTicket() {
+    private void acheterTicket() {
         this.state = ClientState.INIT;
         try {
             Thread.sleep(TICKET_DELAY);
@@ -50,7 +50,7 @@ public class Client extends Thread {
 
     @Override
     public void run() {
-        achterTicket();
+        acheterTicket();
         allerA(attraction1);
         faireAttraction();
         allerA(attraction2);
